@@ -30,10 +30,12 @@ def LatLong2PixelXY(latitude, longitude,level):
 
 	return pixelX,pixelY
 
+
 def PixelXY2TileXY(pixleX,pixelY):
 	tileX=int(pixleX/256)
 	tileY=int(pixelY/256)
 	return tileX,tileY
+
 
 def TileXYtoQuadKey(tileX,tileY,level):
 	quad=""
@@ -64,5 +66,6 @@ def LatLong2QuadKey(lat,lon,level):
 	tileX,tileY=PixelXY2TileXY(pixelX,pixelY)
 	quad=TileXYtoQuadKey(tileX,tileY,level)
 	return quad
+
 
 print LatLong2QuadKey(2000,0.0,3)
