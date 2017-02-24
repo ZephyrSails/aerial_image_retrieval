@@ -37,7 +37,7 @@ def PixelXY2TileXY(pixleX,pixelY):
 	return tileX,tileY
 
 
-def TileXYtoQuadKey(tileX,tileY,level):
+def TileXYtoQuadKey(tileX, tileY, level):
 	quad=""
 	for i in xrange(level,0,-1):
 		digit='0'
@@ -49,8 +49,6 @@ def TileXYtoQuadKey(tileX,tileY,level):
 			digit = chr(ord(digit) + 1)
 		quad+=digit
 	return quad
-
-
 
 
 def LatLong2QuadKey(lat,lon,level):
