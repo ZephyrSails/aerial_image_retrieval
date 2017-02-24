@@ -24,6 +24,7 @@ def LatLong2PixelXY(latitude, longitude,level):
 	sinLatitude=math.sin(latitude*math.pi/180)
 	y=0.5-math.log((1+sinLatitude)/(1-sinLatitude))/(4*math.pi)
 
+	# print level
 	mapSize=256*(2**level)
 	pixelX=int(clip(x*mapSize+0.5,0,mapSize-1))
 	pixelY=int(clip(y*mapSize+0.5,0,mapSize-1))
@@ -51,6 +52,11 @@ def TileXYtoQuadKey(tileX, tileY, level):
 	return quad
 
 
+def LatLong2TileXY(lat, lon, level):
+	pixelX,pixelY=LatLong2PixelXY(lat,lon,level)
+	return PixelXY2TileXY(pixelX,pixelY)
+
+
 def LatLong2QuadKey(lat,lon,level):
 	"""
 	input:
@@ -60,10 +66,13 @@ def LatLong2QuadKey(lat,lon,level):
 	"""
 	lat=clip(lat,MinLatitude,MaxLatitude)
 	lon=clip(lon,MinLongitude,MaxLongitude)
-	pixelX,pixelY=LatLong2PixelXY(lat,lon,level)
-	tileX,tileY=PixelXY2TileXY(pixelX,pixelY)
+	# pixelX,pixelY=LatLong2PixelXY(lat,lon,level)
+	#
+	# tileX,tileY=PixelXY2TileXY(pixelX,pixelY)
+	tileX,tileY = LatLong2TileXY(lat,lon,level)
 	quad=TileXYtoQuadKey(tileX,tileY,level)
 	return quad
 
 
-print LatLong2QuadKey(2000,0.0,3)
+if __name__ == '__main__':
+	print LatLong2QuadKey(2000,0.0,3)
