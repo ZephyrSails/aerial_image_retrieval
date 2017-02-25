@@ -4,6 +4,7 @@ from PIL import Image
 from convert import *
 import io
 
+
 LICENCE_KEY = 'AhHPXuVNzco40xVgSzCMz6TmC589Zlp-F2_Wj065PQW1Cr0SyOLC_EoyMEnJZ6Lx'
 LICENCE_PARAM = 'key=%s' % LICENCE_KEY
 
@@ -83,9 +84,6 @@ def isExist(subImg):
     """
     Check if we can find the image in Bing Maps RESTful,
     If we cannot find, Bing Mpas will return a Placeholder image.
-
-    We realized, we do not actually need this, if the image is not found
-    It will return a empty image, and this won't influence the result
     """
     return subImg != Image.open('null.jpeg')
 
@@ -157,7 +155,7 @@ def downloadAerialImage(lat1, lon1, lat2, lon2):
 
 if __name__ == '__main__':
     """
-    You can try following command, or somewhere yourself.
+    You can try following command, or somewhere!
     # Germen
     ~ python getGeoInfo.py 50.625 8.43751 53.4375 11.25
     # White house

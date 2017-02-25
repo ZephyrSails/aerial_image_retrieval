@@ -9,6 +9,7 @@ MaxLatitude = 85.05112878;
 MinLongitude = -180;
 MaxLongitude = 180;
 
+
 def clip(inputVal, minVal, maxVal):
 	"""
 	if the input exceeds the min/max value, clip it into min/max value
