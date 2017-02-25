@@ -16,6 +16,7 @@ TILE_SIZE = 2 ** 8  # Tile size deside how small should we compress tile image,
 
 # TILE_UP_BOUND = 2 ** 8    # We decide not to use this
 IMG_SIZE = 2 ** 14  # If you do not want to wait so long, use smaller IMG_SIZE
+NULL_IMG = Image.open('null.jpeg') # The place holder used by Bings Map RESTful
 
 
 def buildImage(lat1, lon1, lat2, lon2, fileName='test.jpeg'):
@@ -34,6 +35,7 @@ def buildImage(lat1, lon1, lat2, lon2, fileName='test.jpeg'):
     currTileSize = IMG_SIZE / 2
     # print currTileSize
 
+
     # while currTileSize == TILE_SIZE or currTileAmount(lat1, lon1, lat2, lon2, currLv) <= TILE_UP_BOUND or currLv == RESOLUTION_UPBOUND:
     while currTileSize >= TILE_SIZE and currLv <= RESOLUTION_UPBOUND:
         print "current detail level: %d, current tile size: %dpx" % (currLv, currTileSize)
@@ -48,13 +50,17 @@ def buildImage(lat1, lon1, lat2, lon2, fileName='test.jpeg'):
         for X in xrange(x1, x2 + 1):
             for Y in xrange(y1, y2 + 1):
                 try:    # sometime there might be connection problem
-                    subImg = downloadImageByTileXY(X, Y, currLv).resize((currTileSize, currTileSize))
-                except:
+                    subImg = downloadImageByTileXY(X, Y, currLv)
+                except: # Move on if it happened.
                     continue
                 if isExist(subImg):
+                    # print True
+                    subImg = subImg.resize((currTileSize, currTileSize))
                     pX, pY = (X-x0) * currTileSize, (Y-y0) * currTileSize
                     # Paste the downloaded image to proper place
                     image.paste(subImg, (pX, pY, pX + currTileSize, pY + currTileSize))
+                # else:
+                    # print False
 
         x0, y0 = x0 * 2, y0 * 2
         currLv += 1
@@ -75,10 +81,13 @@ def buildImage(lat1, lon1, lat2, lon2, fileName='test.jpeg'):
 
 def isExist(subImg):
     """
+    Check if we can find the image in Bing Maps RESTful,
+    If we cannot find, Bing Mpas will return a Placeholder image.
+
     We realized, we do not actually need this, if the image is not found
     It will return a empty image, and this won't influence the result
     """
-    return True
+    return subImg != Image.open('null.jpeg')
 
 
 def downloadImageByTileXY(x, y, level):
@@ -97,9 +106,11 @@ def currTileAmount(lat1, lon1, lat2, lon2, currLv):
     """
     x1, y1 = LatLong2TileXY(lat1, lon1, currLv)
     x2, y2 = LatLong2TileXY(lat2, lon2, currLv)
+    if x1 > x2: x1, x2 = x2, x1
+    if y1 > y2: y1, y2 = y2, y1
     # print (x2 - x1 + 1) * (y2 - y1 + 1)
     # print (x2 - x1 + 1), (y2 - y1 + 1)
-    return (x2 - x1 + 1) * (y1 - y2 + 1)
+    return (x2 - x1 + 1) * (y2 - y1 + 1)
 
 
 def calcCommonLevel(lat1, lon1, lat2, lon2):
