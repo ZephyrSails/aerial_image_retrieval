@@ -1,20 +1,26 @@
 import math
 
+#define the Radius of Earth
 EarthRadius = 6378137;
+#in Bing Maps Tile System, the maximum latitude shown is 85.05112878 degrees
 MinLatitude = -85.05112878;
 MaxLatitude = 85.05112878;
+#define the range of longitude
 MinLongitude = -180;
 MaxLongitude = 180;
 
-
 def clip(inputVal, minVal, maxVal):
 	"""
-	clip the input longitude and latitude
+	if the input exceeds the min/max value, clip it into min/max value
 	"""
 	return min(max(inputVal,minVal),maxVal)
 
 
 def LatLong2PixelXY(latitude, longitude,level):
+	"""
+	Converts a point from latitude/longitude WGS-84 coordinates (in degrees)
+	into pixel XY coordinates at a specified level of detail.
+	"""
 	latitude=float(latitude)
 	longitude=float(longitude)
 	latitude=clip(latitude,MinLatitude,MaxLatitude)
@@ -33,12 +39,20 @@ def LatLong2PixelXY(latitude, longitude,level):
 
 
 def PixelXY2TileXY(pixleX,pixelY):
+	"""
+	Converts pixel XY coordinates into
+	tile XY coordinates of the tile containing the specified pixel.
+	"""
 	tileX=int(pixleX/256)
 	tileY=int(pixelY/256)
 	return tileX,tileY
 
 
 def TileXYtoQuadKey(tileX, tileY, level):
+	"""
+	Converts tile XY coordinates into
+	a QuadKey at a specified level of detail.
+	"""
 	quad=""
 	for i in xrange(level,0,-1):
 		digit='0'
@@ -53,6 +67,10 @@ def TileXYtoQuadKey(tileX, tileY, level):
 
 
 def LatLong2TileXY(lat, lon, level):
+	"""
+	Convert latitude/longitude into tileXY coordinates of tile
+	containing the specified point
+	"""
 	pixelX,pixelY=LatLong2PixelXY(lat,lon,level)
 	return PixelXY2TileXY(pixelX,pixelY)
 
